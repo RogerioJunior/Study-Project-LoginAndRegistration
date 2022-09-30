@@ -1,22 +1,54 @@
 import "./App.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
+import axios from "axios";
 
 function App() {
-  const handleClickRegister = (values) => { return console.log(values); };
+  const handleClickRegister = (values) => {
+    axios
+      .post("http://localhost:3001/register", {
+        email: values.email,
+        password: values.password,
+      })
+      .then((response) => {
+        console.log(response);
+      });
+  };
+
   const handleClickLogin = (values) => {
-    return console.log(values);
+    axios
+      .post("http://localhost:3001/login", {
+        email: values.email,
+        password: values.password,
+      })
+      .then((response) => {
+        alert(response.data.msg);
+      });
   };
 
   const validationLogin = yup.object().shape({
-    email: yup.string().email("email e/ou senha incorretos").required("Campo obrigatório"),
-    password: yup.string().min(6, "email e/ou senha incorretos").required("Campo obrigatório"),
+    email: yup
+      .string()
+      .email("email e/ou senha incorretos")
+      .required("Campo obrigatório"),
+    password: yup
+      .string()
+      .min(6, "email e/ou senha incorretos")
+      .required("Campo obrigatório"),
   });
 
   const validationRegister = yup.object().shape({
-    email: yup.string().email("email e/ou senha incorretos").required("Campo obrigatório"),
-    password: yup.string().min(6, "A senha deve ter no minimo 6 caracteres").required("Campo obrigatório"),
-    confirmPassword : yup.string().oneOf([yup.ref("password"), null], "As senhas não são iguais"),
+    email: yup
+      .string()
+      .email("email e/ou senha incorretos")
+      .required("Campo obrigatório"),
+    password: yup
+      .string()
+      .min(6, "A senha deve ter no minimo 6 caracteres")
+      .required("Campo obrigatório"),
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref("password"), null], "As senhas não são iguais"),
   });
 
   return (
@@ -51,8 +83,6 @@ function App() {
         </Form>
       </Formik>
 
-
-
       <h1>Cadastro</h1>
       <Formik
         initialValues={{}}
@@ -78,7 +108,11 @@ function App() {
           </div>
 
           <div className="register-form-group">
-            <Field name="confirmPassword" className="form-field" placeholder="Confirme sua senha" />
+            <Field
+              name="confirmPassword"
+              className="form-field"
+              placeholder="Confirme sua senha"
+            />
             <ErrorMessage
               component="span"
               name="confirmPassword"
@@ -87,7 +121,7 @@ function App() {
           </div>
 
           <button className="button" type="submit">
-            Login
+            Cadastrar
           </button>
         </Form>
       </Formik>
